@@ -52,7 +52,7 @@ class BaseDefense extends React.Component {
         console.log(newcost);
         this.setState({count: count, allcost: newcost})
     } else {
-        alert('Хренушки!');
+        alert('Хренушки! Кончилося');
     }
 
     }
