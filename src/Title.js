@@ -2,11 +2,13 @@ import React from "react";
 class Title extends React.Component {
     render() {
       return (
-        <h1
+        <div style={this.props.style}>
+        <h2
           className="allscore"
         >
-        Количество очков: {this.props.value}
-        </h1>
+        Количество очков: {this.props.value}, потрачено очков: {this.props.wasted}
+        </h2>
+        </div>
       );
     }
   }

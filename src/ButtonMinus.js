@@ -1,17 +1,15 @@
 import React from "react";
-
-
-class Button extends React.Component {
+class ButtonMinus extends React.Component {
     render() {
       return (
-        <button  
+        <button
           className="btn btn-outline-secondary btn-sm"
           id = {this.props.id}
           onClick={() => this.props.onClick()}
         >
-          +
+          -
         </button>
       );
     }
   }
-  export default Button;
+  export default ButtonMinus;
