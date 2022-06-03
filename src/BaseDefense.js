@@ -6,6 +6,7 @@ import { Table } from "react-bootstrap"
 import ButtonSave from "./ButtonSave"
 import ButtonClear from "./ButtonClear"
 import ButtonDownload from "./ButttonDownload"
+import Classes from "./Classes"
 
 
 class BaseDefense extends React.Component {    
@@ -37,7 +38,8 @@ class BaseDefense extends React.Component {
             cost: [1, 1, 1, 2.5, 2.5, 2.5, 2, 2, 2, 2, 1, 1, 1, 1, 1.5, 3, 2, 2.5, 2.5, 2.5, 2.5],
             href: '',
             newStats: [],
-            wasted: 0
+            wasted: 0,
+            classes: '',
     }
        //this.clickButton = this.clickButton.bind(this);
     }
@@ -57,24 +59,11 @@ class BaseDefense extends React.Component {
         onClick={() => this.clickClear()}/>
     }
 
-    saveStats = () => {
-        let counter = this.state.count.slice();
-        let name = document.getElementsByTagName('th');
-        let newStats = [];
-        
-        for(let i = 0; i < counter.length; i++) {
-            if(counter[i] > 0) {
-            let m = `${name[i].textContent}: ${counter[i]} \n`;
-            console.log(m);
-            newStats.push(m);
-            } 
-        }
-        let w = `Потрачено очков: ${this.state.wasted}`;
-        newStats.push(w);
-        let file = new Blob([newStats], {type: 'text/plain'});
-        let href = URL.createObjectURL(file);
-        let href2 = href.toString()
-        this.setState({newStats: newStats, href: href2});    
+    renderDropdown () {
+        return <Classes
+        onClick = {() => this.handleSubmit()}
+        onChange={(event) => this.handleChange(event)}
+        value = {this.state.classes} />
     }
 
     renderButtonSave() {
@@ -97,7 +86,27 @@ class BaseDefense extends React.Component {
                         background: '#f5f5f5'}}/>
     }
 
-    handleClick(i) {
+    saveStats = () => {
+        let counter = this.state.count.slice();
+        let name = document.getElementsByTagName('th');
+        let newStats = [];
+        
+        for(let i = 0; i < counter.length; i++) {
+            if(counter[i] > 0) {
+            let m = `${name[i].textContent}: ${counter[i]} \n`;
+            console.log(m);
+            newStats.push(m);
+            } 
+        }
+        let w = `Потрачено очков: ${this.state.wasted}`;
+        newStats.push(w);
+        let file = new Blob([newStats], {type: 'text/plain'});
+        let href = URL.createObjectURL(file);
+        let href2 = href.toString()
+        this.setState({newStats: newStats, href: href2});    
+    }
+
+     handleClick(i) {
         let allcost = this.state.allcost;
         const costs = this.state.cost.slice();
         let wast = this.state.wasted;
@@ -137,147 +146,171 @@ class BaseDefense extends React.Component {
         }
         this.setState({count: count, allcost: 12, newStats: [], wasted: 0});
     }
+
+    handleChange(event) {
+        let m = event.target.value;
+        this.setState({classes: m});
+    }
+     
+    handleSubmit(){
+
+        let cl = this.state.classes;
+        
+        if (cl === "technical") {
+            console.log(cl);
+        } else if (cl === "talant") {
+            this.setState({allcost: 0, wasted: 12}); 
+        } else if (cl === "spirit") {
+            console.log(cl);
+        } else if (cl === "grammaton") {
+            this.setState({allcost: 8});
+        } else if (cl === "soulinker") {
+            console.log(cl);
+        }
+        
+    }
     
     render() {
             return <div>
             {this.renderTitle()}
+            {this.renderDropdown()}
         <Table striped bordered hover size="sm" id = "stats">
             <thead className= "table-light">
                 <tr>
-                <td><strong>Прием</strong></td>
-                <td><strong>Количество</strong></td>
+                <td><strong>Прием (цена)</strong></td>
+                <td><strong>Кол-во</strong></td>
                 <td></td>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <th>Защита от удара рукой</th>
+                    <th>Защита от удара рукой ({this.state.cost[0]})</th>
                     <td>{this.state.count[0]}</td>
-                    <td>{this.renderButton(0)} &nbsp;
+                    <td>{this.renderButton(0)}&nbsp;
                     {this.renderButtonMinus(0)}</td>
                 </tr>
                 <tr>    
-                    <th>Защита от удара ногой</th>
+                    <th>Защита от удара ногой ({this.state.cost[1]})</th>
                     <td>{this.state.count[1]}</td>
-                    <td>{this.renderButton(1)} &nbsp;
+                    <td>{this.renderButton(1)}&nbsp;
                     {this.renderButtonMinus(1)}</td>
                 </tr>
                 <tr>
-                    <th>Защита от удара оружием</th>
+                    <th>Защита от удара оружием ({this.state.cost[2]})</th>
                     <td>{this.state.count[2]}</td>
-                    <td>{this.renderButton(2)}  &nbsp;
+                    <td>{this.renderButton(2)}&nbsp;
                     {this.renderButtonMinus(2)}</td>
                 </tr>
                 <tr>
-                    <th>Контрудар (рука)</th>
+                    <th>Контрудар (рука) ({this.state.cost[3]})</th>
                     <td>{this.state.count[3]}</td>
-                    <td>{this.renderButton(3)}  &nbsp;
+                    <td>{this.renderButton(3)}&nbsp;
                     {this.renderButtonMinus(3)}</td>
                 </tr>
                 <tr>
-                    <th>Контрудар(нога)</th>
+                    <th>Контрудар(нога) ({this.state.cost[4]})</th>
                     <td>{this.state.count[4]}</td>
-                    <td>{this.renderButton(4)}  &nbsp;
+                    <td>{this.renderButton(4)}&nbsp;
                     {this.renderButtonMinus(4)}</td>
                     
                 </tr>
                 <tr>
-                    <th>Контрудар(оружие)</th>
+                    <th>Контрудар(оружие) ({this.state.cost[5]})</th>
                     <td>{this.state.count[5]}</td>
-                    <td>{this.renderButton(5)}  &nbsp;
+                    <td>{this.renderButton(5)}&nbsp;
                     {this.renderButtonMinus(5)}</td>
                 </tr>
                 <tr>
-                    <th>Атака головой</th>
+                    <th>Атака головой ({this.state.cost[6]})</th>
                     <td>{this.state.count[6]}</td>
-                    <td>{this.renderButton(6)}  &nbsp;
+                    <td>{this.renderButton(6)}&nbsp;
                     {this.renderButtonMinus(6)}</td>
                 </tr>
                 <tr>
-                    <th>Атака в глаза</th>
+                    <th>Атака в глаза ({this.state.cost[7]})</th>
                     <td>{this.state.count[7]}</td>
-                    <td>{this.renderButton(7)}  &nbsp;
+                    <td>{this.renderButton(7)}&nbsp;
                     {this.renderButtonMinus(7)}</td>
                 </tr>
                 <tr>
-                    <th>Атака локтем</th>
+                    <th>Атака локтем ({this.state.cost[8]})</th>
                     <td>{this.state.count[8]}</td>
-                    <td>{this.renderButton(8)}  &nbsp;
+                    <td>{this.renderButton(8)}&nbsp;
                     {this.renderButtonMinus(8)}</td>
                 </tr>
                 <tr>
-                    <th>Атака коленом</th>                
+                    <th>Атака коленом ({this.state.cost[9]})</th>                
                     <td>{this.state.count[9]}</td>
-                    <td>{this.renderButton(9)}  &nbsp;
+                    <td>{this.renderButton(9)}&nbsp;
                     {this.renderButtonMinus(9)}</td>
                 </tr>
                 <tr>
-                    <th>Защита от атаки головой</th>
+                    <th>Защита от атаки головой ({this.state.cost[10]})</th>
                     <td>{this.state.count[10]}</td>
-                    <td>{this.renderButton(10)}  &nbsp;
+                    <td>{this.renderButton(10)}&nbsp;
                     {this.renderButtonMinus(10)}</td>
                     
                 </tr>
                 <tr>
-                    <th>Защита от атаки в глаза</th>
+                    <th>Защита от атаки в глаза ({this.state.cost[11]})</th>
                     <td>{this.state.count[11]}</td>
-                    <td>{this.renderButton(11)}  &nbsp;
+                    <td>{this.renderButton(11)}&nbsp;
                     {this.renderButtonMinus(11)}</td>
                 </tr>
                 <tr>
-                    <th>Защита от атаки локтем</th>
+                    <th>Защита от атаки локтем ({this.state.cost[12]})</th>
                     <td>{this.state.count[12]}</td>
-                    <td>{this.renderButton(12)}  &nbsp;
+                    <td>{this.renderButton(12)}&nbsp;
                     {this.renderButtonMinus(12)}</td>
                 </tr>
                 <tr>
-                    <th>Защита от атаки коленом</th>
+                    <th>Защита от атаки коленом ({this.state.cost[13]})</th>
                     <td>{this.state.count[13]}</td>
-                    <td>{this.renderButton(13)}  &nbsp;
+                    <td>{this.renderButton(13)}&nbsp;
                     {this.renderButtonMinus(13)}</td>
                 </tr>
                 <tr>
-                    <th>Серия (2 базовых)</th>
+                    <th>Серия (2 базовых) ({this.state.cost[14]})</th>
                     <td>{this.state.count[14]}</td>
-                    <td>{this.renderButton(14)}  &nbsp;
+                    <td>{this.renderButton(14)}&nbsp;
                     {this.renderButtonMinus(14)}</td>
                 </tr>
                 <tr>
-                    <th>Серия (базовый+средний)</th>
+                    <th>Серия (базовый+средний) ({this.state.cost[15]})</th>
                     <td>{this.state.count[15]}</td>
-                    <td>{this.renderButton(15)}  &nbsp;
+                    <td>{this.renderButton(15)}&nbsp;
                     {this.renderButtonMinus(15)}</td>
                 </tr>
                 <tr>
-                    <th>Разрыв дистанции</th>
+                    <th>Разрыв дистанции ({this.state.cost[16]})</th>
                     <td>{this.state.count[16]}</td>
-                    <td>{this.renderButton(16)} &nbsp;
+                    <td>{this.renderButton(16)}&nbsp;
                     {this.renderButtonMinus(16)}</td>
                 </tr>
                 <tr>
-                    <th>Контрудар(голова)</th>
+                    <th>Контрудар(голова) ({this.state.cost[17]})</th>
                     <td>{this.state.count[17]}</td>
-                    <td>{this.renderButton(17)}  &nbsp;
+                    <td>{this.renderButton(17)}&nbsp;
                     {this.renderButtonMinus(17)}</td>
                 </tr>
                 <tr>
-                    <th>Контрудар(глаза)</th>
+                    <th>Контрудар(глаза) ({this.state.cost[18]})</th>
                     <td>{this.state.count[18]}</td>
-                    <td>{this.renderButton(18)}  &nbsp;
+                    <td>{this.renderButton(18)}&nbsp;
                     {this.renderButtonMinus(18)}</td>
                     
                 </tr>
                 <tr>                 
-                    <th>Контрудар(локоть)</th>
+                    <th>Контрудар(локоть) ({this.state.cost[19]})</th>
                     <td>{this.state.count[19]}</td>
-                    <td>{this.renderButton(19)}  &nbsp;
+                    <td>{this.renderButton(19)}&nbsp;
                     {this.renderButtonMinus(19)}</td>
                     
                 </tr>
                 <tr>
-                    <th>Контрудар(колено)</th>
+                    <th>Контрудар(колено) ({this.state.cost[20]})</th>
                     <td>{this.state.count[20]}</td>
-                    <td>{this.renderButton(20)}  &nbsp;
+                    <td>{this.renderButton(20)}&nbsp;
                     {this.renderButtonMinus(20)}</td>
                 </tr>
             </tbody>
