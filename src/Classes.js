@@ -13,10 +13,10 @@ class Classes extends React.Component {
             <option value="talant">Талантливый</option>
             <option value="spirit">Духовный</option>
             <option value="grammaton">Грамматон</option>
-            <option value="soulinker">Соулинкер</option>
+            <option value="soulinker">Соуллинкер</option>
           </select>
         </label>
-        &nbsp;&nbsp;<button className="btn btn-outline-secondary btn-sm" onClick = {() => this.props.onClick()}> Выбрать</button>
+        &nbsp;&nbsp;<button className="btn btn-outline-secondary btn-sm" id = 'change' onClick = {() => this.props.onClick()}> Выбрать</button>
         
       </div> 
 

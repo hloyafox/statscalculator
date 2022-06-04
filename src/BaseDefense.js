@@ -63,7 +63,8 @@ class BaseDefense extends React.Component {
         return <Classes
         onClick = {() => this.handleSubmit()}
         onChange={(event) => this.handleChange(event)}
-        value = {this.state.classes} />
+        value = {this.state.classes} 
+        id = {this.state.classes}/>
     }
 
     renderButtonSave() {
@@ -104,6 +105,37 @@ class BaseDefense extends React.Component {
         let href = URL.createObjectURL(file);
         let href2 = href.toString()
         this.setState({newStats: newStats, href: href2});    
+    }
+
+    randomIndex(min, max) {
+        let m = [];
+        for (let i = 0; i < 14; i++) {
+            let a = Math.floor(Math.random() * (max - min + 1)) + min;
+            m.push(a);
+        }
+        console.log(m);
+        return m;
+    }
+
+    generateStatsTalant() {
+        let costs = this.state.cost;      
+        let random = this.randomIndex(1, 21);
+        for(let i = 0; i < random.length; i++) {
+            let item = random[i];
+            let allcosts = this.state.allcost;
+            let counts = this.state.count.slice();
+            let wastAll = this.state.wasted;
+            if (allcosts >= 0 && costs[item] <= allcosts) {
+                let price = costs[item];
+                let newAllcost = allcosts - price;
+                counts[item] = ++counts[item];
+                let newWastAll = wastAll + price;
+                this.setState({count: counts, allcost: newAllcost, wasted: newWastAll});
+            }  else if(allcosts >=0 && costs[item] > allcosts) {
+                break;
+            }
+        };
+
     }
 
      handleClick(i) {
@@ -149,22 +181,68 @@ class BaseDefense extends React.Component {
 
     handleChange(event) {
         let m = event.target.value;
-        this.setState({classes: m});
+    if (m === 'talant') {
+        this.clickClear();
+        let n = document.querySelector('#change');
+        n.textContent = 'Сгененрировать';
+        let minus = document.querySelectorAll('.minus');
+        minus.forEach(element => {
+             element.setAttribute('disabled', "");
+            });
+        let plus = document.querySelectorAll('.plus');
+        plus.forEach(element => {
+            element.setAttribute('disabled', "");
+           });
+            this.setState({classes: m, allcost: 14});
+    } else if (m === 'grammaton') {
+        this.clickClear();
+            let n = document.querySelector('#change');
+                n.textContent = 'Выбрать';
+            let minus = document.querySelectorAll('.minus');
+                minus.forEach(element => {
+                    element.removeAttribute('disabled');
+                });
+        let plus = document.querySelectorAll('.plus');
+            plus.forEach(element => {
+                element.removeAttribute('disabled');
+            });
+        this.setState({classes: m, allcost: 8});
+        
+    } else {
+        this.clickClear();
+        let n = document.querySelector('#change');
+        n.textContent = 'Выбрать';
+        let minus = document.querySelectorAll('.minus');
+        minus.forEach(element => {
+             element.removeAttribute('disabled');
+            });
+        let plus = document.querySelectorAll('.plus');
+        plus.forEach(element => {
+            element.removeAttribute('disabled');
+           });
+        this.setState({classes: m, allcost: 12});
+       }
     }
-     
+    
     handleSubmit(){
 
         let cl = this.state.classes;
         
         if (cl === "technical") {
+            this.clickClear();
             console.log(cl);
         } else if (cl === "talant") {
-            this.setState({allcost: 0, wasted: 12}); 
+            let n = document.querySelector('#change');
+            n.textContent = 'Сгененрировать ещё';
+            this.generateStatsTalant();
         } else if (cl === "spirit") {
+            this.clickClear();
             console.log(cl);
         } else if (cl === "grammaton") {
-            this.setState({allcost: 8});
+            this.clickClear();
+            this.setState({allcost: 8})
         } else if (cl === "soulinker") {
+            this.clickClear();
             console.log(cl);
         }
         
