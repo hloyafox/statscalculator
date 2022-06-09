@@ -6,7 +6,9 @@ import { Table } from "react-bootstrap"
 import ButtonSave from "./ButtonSave"
 import ButtonClear from "./ButtonClear"
 import ButtonDownload from "./ButttonDownload"
+import ButtonHint from "./ButtonHint"
 import Classes from "./Classes"
+import hint from "./hint.jpg"
 
 
 class BaseDefense extends React.Component {    
@@ -57,6 +59,11 @@ class BaseDefense extends React.Component {
     renderButtonClear(key) {
         return <ButtonClear
         onClick={() => this.clickClear()}/>
+    }
+
+    renderButtonHint() {
+        return <ButtonHint
+        onClick={() => this.clickHint()}/>
     }
 
     renderDropdown () {
@@ -171,12 +178,32 @@ class BaseDefense extends React.Component {
     }
     }
 
+    clickHint () {
+        let img = document.querySelector(".image");
+        let btnHint = document.querySelector(".btn-info")
+        if(img.style.display === "none") {
+        img.style.display = "";
+        btnHint.textContent = 'Скрыть'
+        } else {
+            img.style.display = "none";
+            btnHint.textContent = 'Подсказка';
+        }
+        
+    }
+
     clickClear() {
+        let cl = this.state.classes;
         const count = this.state.count.slice();
         for(let i = 0; i < count.length; i++) {
             count[i] = 0;
         }
-        this.setState({count: count, allcost: 12, newStats: [], wasted: 0});
+        if(cl === 'talant') {
+        this.setState({count: count, allcost: 14, newStats: [], wasted: 0});
+        } else if (cl === 'grammaton') {
+            this.setState({count: count, allcost: 8, newStats: [], wasted: 0});
+        } else {
+            this.setState({count: count, allcost: 12, newStats: [], wasted: 0});
+        }
     }
 
     handleChange(event) {
@@ -252,6 +279,7 @@ class BaseDefense extends React.Component {
             return <div>
             {this.renderTitle()}
             {this.renderDropdown()}
+                        
         <Table striped bordered hover size="sm" id = "stats">
             <thead className= "table-light">
                 <tr>
@@ -394,7 +422,11 @@ class BaseDefense extends React.Component {
             </tbody>
         </Table>
         <div className = "mt-2 mb-4">{this.renderButtonSave()} &nbsp; {this.renderButtonClear()} &nbsp; {this.renderButtonDownload()}</div>
-        </div>
+        <div className = "mt-2 mb-4">{this.renderButtonHint()}</div>
+        <div className="image" style={{display: "none"}}>
+        <img src={hint}></img>
+    </div>
+    </div>
     }
 }
 export default BaseDefense;
